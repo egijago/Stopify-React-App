@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   web:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     volumes:
@@ -12,3 +12,6 @@ services:
       - '3000:3000'
     environment:
       - CHOKIDAR_USEPOLLING=true
+
+volumes:
+  stopify-react:

@@ -3,18 +3,15 @@ FROM node:16-alpine
 # set working directory
 WORKDIR /app
 
-# add `/app/node_modules/.bin` to $PATH
-# ENV PATH /app/node_modules/.bin:$PATH
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
 
-# install app dependencies
-COPY package.json ./
-COPY package-lock.json ./
-RUN rm -rf node_modules
+# Install dependencies
 RUN npm install
 
-# add app
-COPY . ./
+# Copy the rest of the application code to the working directory
+COPY . .
 
 # start app
 EXPOSE 3000
-CMD ["npm", "run", "dev"]
+ENTRYPOINT ["npm", "run", "dev"]
