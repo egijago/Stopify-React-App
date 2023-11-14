@@ -1,15 +1,20 @@
-import { NavLink, Route, Routes } from "react-router-dom"
+import { NavLink, Route, Routes } from 'react-router-dom';
 
-import "@radix-ui/themes/styles.css"
-import "../dist/output.css"
+import '@radix-ui/themes/styles.css';
+import '../dist/output.css'
 
-import HomePage from "./pages/Home"
-import StopifyStudioPage from "./pages/StopifyStudio"
-import SubsciberAnalytics from "./pages/SubscriberAnalytics"
-import NotFoundPage from "./pages/NotFound"
-import MusicAnalytics from "./pages/MusicAnalytics"
-import { AuthContext } from "./context/AuthContext"
-import { User } from "./lib/models/User"
+import HomePage from './pages/Home';
+import StopifyStudioPage from './pages/StopifyStudio';
+import SubsciberAnalytics from './pages/SubscriberAnalytics';
+import NotFoundPage from './pages/NotFound';
+import MusicAnalytics from './pages/MusicAnalytics';
+import AddPoster from './pages/Banner';
+import { AuthContext } from './context/AuthContext';
+import { User } from './lib/models/User';
+import Login from './pages/Auth/Login';
+import Register from './pages/Auth/Register';
+import AddBanner from './pages/Banner';
+import SubscriberLists from './pages/Subscriber';
 
 function App() {
   const authContext: User = {
@@ -46,14 +51,13 @@ function App() {
         </nav>
         <div className="page-wrapper ml-[20%] pl-[7%] pt-[7%]">
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/stopify-studio" element={<StopifyStudioPage />} />
-            <Route path="/music-analytics" element={<MusicAnalytics />} />
-            <Route
-              path="/subscriber-analytics"
-              element={<SubsciberAnalytics />}
-            />
-            <Route path="*" element={<NotFoundPage />} />
+            <Route path="/" element={<HomePage/>} />
+            <Route path="/stopify-studio" element={<StopifyStudioPage/>} />
+            <Route path="/music-analytics" element={<MusicAnalytics/>} />
+            <Route path="/subscriber-analytics" element={<SubsciberAnalytics/>} />
+            <Route path="/banner" element={<AddBanner/>} />
+            <Route path="/subscribers" element={<SubscriberLists/>} />
+            <Route path="*" element={<NotFoundPage/>} />
           </Routes>
         </div>
       </AuthContext.Provider>
