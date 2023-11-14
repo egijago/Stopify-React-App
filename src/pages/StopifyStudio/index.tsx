@@ -1,7 +1,5 @@
 const StopifyStudioPage = () => {
-    return <>
-        This is Stopify studio
-    </>
+  return <>This is Stopify studio</>
 }
 
-export default StopifyStudioPage;
+export default StopifyStudioPage

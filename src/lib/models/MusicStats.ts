@@ -1,9 +1,9 @@
 export interface MusicStats {
-    title: string;
-    listenerCount: number;
-    likedCount: number;
-    history: {
-        month: number;
-        listenerCount: number;
-    }
+  id: number
+  title: string
+  likedCount: number
+  listener: {
+    month: number
+    count: number
+  }[]
 }

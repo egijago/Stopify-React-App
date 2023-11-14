@@ -1,5 +1,5 @@
 export interface GenreStats {
-    genre: string;
-    listenerCount: number;
-    likedCount: number;
+  genre: string
+  listenerCount: number
+  likedCount: number
 }
