@@ -8,8 +8,13 @@ import StopifyStudioPage from './pages/StopifyStudio';
 import SubsciberAnalytics from './pages/SubscriberAnalytics';
 import NotFoundPage from './pages/NotFound';
 import MusicAnalytics from './pages/MusicAnalytics';
+import AddPoster from './pages/Banner';
 import { AuthContext } from './context/AuthContext';
 import { User } from './lib/models/User';
+import Login from './pages/Auth/Login';
+import Register from './pages/Auth/Register';
+import AddBanner from './pages/Banner';
+import SubscriberLists from './pages/Subscriber';
 
 
 
@@ -57,6 +62,8 @@ function App() {
             <Route path="/stopify-studio" element={<StopifyStudioPage/>} />
             <Route path="/music-analytics" element={<MusicAnalytics/>} />
             <Route path="/subscriber-analytics" element={<SubsciberAnalytics/>} />
+            <Route path="/banner" element={<AddBanner/>} />
+            <Route path="/subscribers" element={<SubscriberLists/>} />
             <Route path="*" element={<NotFoundPage/>} />
           </Routes>
         </div>
