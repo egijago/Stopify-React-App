@@ -1,28 +1,22 @@
-export function getAlbumAnalyticsByArtistID(idArtist: number) {
-  const data = [
+import { Album } from "../../models/Album"
+
+export const getAllMyAlbum = (): Album[] => {
+  const data: Album[] = [
     {
-      genre: "Math",
-      listenerCount: 120,
+      idAlbum: 1,
+      title: "album 1"
     },
     {
-      genre: "Chinese",
-      listenerCount: 98,
+      idAlbum: 4,
+      title: "album 4"
     },
     {
-      genre: "English",
-      listenerCount: 86,
+      idAlbum: 3,
+      title: "album 3"
     },
     {
-      genre: "Geography",
-      listenerCount: 99,
-    },
-    {
-      genre: "Physics",
-      listenerCount: 85,
-    },
-    {
-      genre: "History",
-      listenerCount: 65,
+      idAlbum: 2,
+      title: "album 2"
     },
   ]
   return data

@@ -7,12 +7,10 @@ import {
   XAxis,
   CartesianGrid,
 } from "recharts"
-import { getAllMusicStatsByArtistId } from "../../lib/api/handler/Music.ts"
-import { useAuthContext } from "../../context/AuthContext.ts"
+import { getAllMusicStats } from "../../lib/api/handler/Music.ts"
 
 const MusicAnalyticsSection = () => {
-  const { id } = useAuthContext()
-  const data = getAllMusicStatsByArtistId(id)
+  const data = getAllMusicStats()
   return (
     <>
       <h1>

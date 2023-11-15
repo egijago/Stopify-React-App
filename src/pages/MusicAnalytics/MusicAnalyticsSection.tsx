@@ -6,29 +6,41 @@ import {
   YAxis,
   XAxis,
   CartesianGrid,
+  BarChart,
+  Bar,
 } from "recharts"
-import { getAllMusicStatsByArtistId } from "../../lib/api/handler/Music.ts"
-import { useContext, useState } from "react"
-import { useAuthContext } from "../../context/AuthContext.ts"
+import { getAllMusicStats } from "../../lib/api/handler/Music.ts"
+import { useState } from "react"
 import { Table } from "@radix-ui/themes"
 
 export const MusicAnalyticsSection = () => {
-  const user = useAuthContext()
-  const data = getAllMusicStatsByArtistId(user.id)
+  const data = getAllMusicStats()
   const [selectedRow, setSelectedRow] = useState(0)
+  const mostLikedMusic = data.reduce((prev, curr) => {
+    return prev.likedCount > curr.likedCount ? prev : curr;
+});
 
   const handleRowClick = (index: number) => {
     setSelectedRow(index)
   }
 
-  const listenerStat = data[selectedRow]?.listener
+  const getDif = (): string => {
+    const dif: number =
+      data[selectedRow].listener[data[selectedRow].listener.length - 1].count -
+      data[selectedRow].listener[data[selectedRow].listener.length - 2].count
+    const difStr: string = dif > 0 ? "+" + dif.toString() : dif.toString()
+    return difStr
+  }
 
+  const listenerStat = data[selectedRow]?.listener
   return (
     <>
       <h1>
-        <strong>Foobar</strong> is your most listened songs this past year
+        There are <strong>{getDif()} people listening</strong> to{" "}
+        {data[selectedRow].title} from last month
       </h1>
-      <MusicAnalyticsChart stats={listenerStat} />
+      <MusicListenerAnalytic stats={listenerStat} />
+
       <h2>
         Here are your <strong>most listened</strong> song this past year
       </h2>
@@ -60,14 +72,21 @@ export const MusicAnalyticsSection = () => {
           ))}
         </Table.Body>
       </Table.Root>
+      <h1><strong>{mostLikedMusic.title}</strong> got the <strong>most like</strong> this past year.</h1>
+      <MusicLikedAnalytic stats={data}/>
     </>
   )
 }
 
-export interface MusicAnalyticsChartProps {
-  stats: { month: number; count: number }[]
+export interface MusicListenerAnalyticProps {
+  stats: {
+    month: number
+    count: number
+  }[]
 }
-const MusicAnalyticsChart: React.FC<MusicAnalyticsChartProps> = ({ stats }) => {
+const MusicListenerAnalytic: React.FC<MusicListenerAnalyticProps> = ({
+  stats,
+}) => {
   const data = stats
   return (
     <>
@@ -85,6 +104,26 @@ const MusicAnalyticsChart: React.FC<MusicAnalyticsChartProps> = ({ stats }) => {
         <Line type="monotone" dataKey="count" stroke="#8884d8" />
       </LineChart>
     </>
+  )
+}
+
+export interface MusicLikedAnalyticProps {
+  stats: {
+    title: string
+    likedCount: number
+  }[]
+}
+const MusicLikedAnalytic: React.FC<MusicLikedAnalyticProps> = ({ stats }) => {
+  const data = stats
+  return (
+    <BarChart width={730} height={250} data={data}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="title" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Bar dataKey="likedCount" fill="#8884d8" />
+    </BarChart>
   )
 }
 
