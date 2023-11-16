@@ -21,6 +21,15 @@ function App() {
     id: 120,
     username: "foobar",
   }
+  if(!authContext){
+    return (
+      <Routes>
+        <Route path="/login" element={<Login/>} />
+        <Route path="/register" element={<Register/>} />
+        <Route path="*" element={<Login/>} />
+      </Routes>
+    )
+  }
   return (
     <>
       <AuthContext.Provider value={authContext}>
