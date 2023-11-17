@@ -10,20 +10,40 @@ import {
   Bar,
 } from "recharts"
 import { getAllMusicStats } from "../../lib/api/handler/Music.ts"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Table } from "@radix-ui/themes"
 
 export const MusicAnalyticsSection = () => {
-  const data = getAllMusicStats()
+  const [data, setData] = useState([])
   const [selectedRow, setSelectedRow] = useState(0)
-  const mostLikedMusic = data.reduce((prev, curr) => {
-    return prev.likedCount > curr.likedCount ? prev : curr;
-});
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const musicStats = await getAllMusicStats()
+        if (!musicStats) {
+          return
+        }
+        setData(musicStats)
+        console.log(musicStats)
+      } catch (error) {
+        // Handle errors here
+        console.error("Error fetching music stats:", error)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  let mostLikedMusic
+  if (data.length !== 0) {
+    mostLikedMusic = data.reduce((prev, curr) => {
+      return prev.likedCount > curr.likedCount ? prev : curr
+    })
+  }
 
   const handleRowClick = (index: number) => {
     setSelectedRow(index)
   }
-
   const getDif = (): string => {
     const dif: number =
       data[selectedRow].listener[data[selectedRow].listener.length - 1].count -
@@ -35,45 +55,53 @@ export const MusicAnalyticsSection = () => {
   const listenerStat = data[selectedRow]?.listener
   return (
     <>
-      <h1>
-        There are <strong>{getDif()} people listening</strong> to{" "}
-        {data[selectedRow].title} from last month
-      </h1>
-      <MusicListenerAnalytic stats={listenerStat} />
+      {data.length !== 0 ? (
+        <>
+          <h1>
+            There are <strong>{getDif()} people listening</strong> to{" "}
+            {data[selectedRow].title} from last month
+          </h1>
+          <MusicListenerAnalytic stats={listenerStat} />
+          <h2>
+            Here are your <strong>most listened</strong> song this past year
+          </h2>
+          <Table.Root>
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeaderCell>Id</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Title</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Dif</Table.ColumnHeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {data.map((music, index) => (
+                <Table.Row onClick={() => handleRowClick(index)}>
+                  <Table.RowHeaderCell>{music.id}</Table.RowHeaderCell>
+                  <Table.Cell>{music.title}</Table.Cell>
+                  <Table.Cell>
+                    {music.listener.length > 1
+                      ? (() => {
+                          const dif =
+                            music.listener[music.listener.length - 1].count -
+                            music.listener[music.listener.length - 2].count
 
-      <h2>
-        Here are your <strong>most listened</strong> song this past year
-      </h2>
-      <Table.Root>
-        <Table.Header>
-          <Table.Row>
-            <Table.ColumnHeaderCell>Id</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Title</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Dif</Table.ColumnHeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {data.map((music, index) => (
-            <Table.Row onClick={() => handleRowClick(index)}>
-              <Table.RowHeaderCell>{music.id}</Table.RowHeaderCell>
-              <Table.Cell>{music.title}</Table.Cell>
-              <Table.Cell>
-                {music.listener.length > 1
-                  ? (() => {
-                      const dif =
-                        music.listener[music.listener.length - 1].count -
-                        music.listener[music.listener.length - 2].count
-
-                      return dif > 0 ? `+${dif}` : dif
-                    })()
-                  : null}
-              </Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table.Root>
-      <h1><strong>{mostLikedMusic.title}</strong> got the <strong>most like</strong> this past year.</h1>
-      <MusicLikedAnalytic stats={data}/>
+                          return dif > 0 ? `+${dif}` : dif
+                        })()
+                      : null}
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+          <h1>
+            <strong>{mostLikedMusic.title}</strong> got the{" "}
+            <strong>most like</strong> this past year.
+          </h1>
+          <MusicLikedAnalytic stats={data} />
+        </>
+      ) : (
+        <>You have not enough music statistics to be shown!</>
+      )}
     </>
   )
 }

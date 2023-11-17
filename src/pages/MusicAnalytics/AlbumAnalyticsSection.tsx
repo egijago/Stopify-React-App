@@ -1,5 +1,4 @@
 import { Legend, PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts"
-import { getAlbumAnalyticsByArtistID } from "../../lib/api/handler/Album.ts"
 import { getAllGenreStats } from "../../lib/api/handler/Genre.ts"
 
 const AlbumAnalyticsSection = () => {
